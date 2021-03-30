@@ -7,6 +7,7 @@ Add yourself as a contributor to this project as a Markdown link that links your
 ## Cohort Participants
 
 - [Vanessa Stewart](https://github.com/vanmars) 🌲
+- [Taryn Miller](https://github.com/tarynblakemiller) 😈
 
 ## Mentors
 
