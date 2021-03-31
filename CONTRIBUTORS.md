@@ -8,6 +8,7 @@ Add yourself as a contributor to this project as a Markdown link that links your
 
 - [Vanessa Stewart](https://github.com/vanmars) 🌲
 - [Taryn Miller](https://github.com/tarynblakemiller) 😈
+- [Tamara Harris](https://github.com/CodenameTam) ✨
 
 ## Mentors
 
