@@ -12,5 +12,6 @@ Add yourself as a contributor to this project as a Markdown link that links your
 
 ## Mentors
 - [Lyle Schemmerling](https://github.com/lyleschemmerling) ¯\_(ツ)_/¯
+- [Juan Andrade](https://github.com/jandrade) 👋
 
 ## Code of Conduct Contacts
