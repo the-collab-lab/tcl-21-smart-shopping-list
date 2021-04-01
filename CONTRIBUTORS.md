@@ -11,6 +11,6 @@ Add yourself as a contributor to this project as a Markdown link that links your
 - [Tamara Harris](https://github.com/CodenameTam) ✨
 
 ## Mentors
-- [Lyle Schemmerling](https://github.com/lyleschemmerling)
+- [Lyle Schemmerling](https://github.com/lyleschemmerling) ¯\_(ツ)_/¯
 
 ## Code of Conduct Contacts
