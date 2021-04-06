@@ -2,7 +2,6 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Test from './components/DBTest';
-import { fb } from './lib/firebase.js';
 
 function App() {
   return (
