@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-// import './App.css';
+import './App.css';
 import List from './components/List/List';
 import AddItem from './components/AddItem/AddItem';
 
 function App() {
   return (
     <Router>
-      <div>
+      <div className="main-div">
         <Switch>
           <Route path="/list">
             <List />
@@ -16,8 +16,18 @@ function App() {
             <AddItem />
           </Route>
         </Switch>
-        <Link to="/list">List</Link>
-        <Link to="/additem">Add Item</Link>
+        <div className="listviews">
+          <button>
+            <Link className="list-item" to="/list">
+              List
+            </Link>
+          </button>
+          <button>
+            <Link className="list-item" to="/additem">
+              Add Item
+            </Link>
+          </button>
+        </div>
       </div>
     </Router>
   );
