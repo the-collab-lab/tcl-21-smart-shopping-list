@@ -15,7 +15,6 @@ var firebaseConfig = {
 };
 
 let fb = firebase.initializeApp(firebaseConfig);
+const firestore = fb.firestore();
 
-export { fb };
-
-// export const db = firebase.firestore();
+export { fb, firestore };
