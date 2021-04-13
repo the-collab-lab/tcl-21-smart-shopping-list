@@ -4,7 +4,6 @@ import './App.css';
 import FirestoreTest from './components/FirestoreTest';
 import List from './components/List/List';
 import AddItem from './components/AddItem/AddItem';
-
 function App() {
   return (
     <Router>
