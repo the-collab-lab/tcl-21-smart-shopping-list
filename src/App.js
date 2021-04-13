@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import FirestoreTest from './components/FirestoreTest';
@@ -7,15 +7,17 @@ import AddItem from './components/AddItem/AddItem';
 import WelcomeScreen from './components/WelcomeScreen/WelcomeScreen';
 
 function App() {
+  const [token, setToken] = useState(window.localStorage.getItem('token'));
+
   return (
     <Router>
       <div className="main-div">
         <Switch>
           <Route exact path="/">
-            <WelcomeScreen />
+            <WelcomeScreen token={token} setToken={setToken} />
           </Route>
           <Route path="/list">
-            <List />
+            <List token={token} setToken={setToken} />
           </Route>
           <Route path="/additem">
             <AddItem />
