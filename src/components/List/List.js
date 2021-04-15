@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { firestore } from '../../lib/firebase.js';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import GroceryItem from '../GroceryItem/GroceryItem';
@@ -8,7 +8,6 @@ const List = () => {
   const listData = firestore.collection('groceryItems');
   const query = listData.orderBy('createdAt'); // query the subset of documents and order them by date
   const [lists] = useCollectionData(query, { idField: 'id' }); // listen and re-render documents in real time
-  const [listName, setListName] = useState(''); // starting the form as an empty string
 
   console.log(listData);
 
