@@ -1,77 +1,38 @@
 import React, { useState } from 'react';
+import { firestore } from '../../lib/firebase.js';
 
 const AddItem = () => {
   const [groceryItem, setGroceryItem] = useState('');
+  const [purchaseDate, setPurchaseDate] = useState(null);
   const [howSoon, setHowSoon] = useState(null);
+  const listData = firestore.collection('groceryItems');
 
   const itemInputChange = (e) => {
     setGroceryItem(e.target.value);
   };
 
-  // const howSoon = (e) => {
-  //   setHowSoon(e.target.value)
-  // }
-
+  const dateInputChange = (e) => {
+    setPurchaseDate(e.target.value);
+  };
   const radioInputChange = (e) => {
     setHowSoon(parseInt(e.target.value));
     console.log(howSoon);
   };
 
-  const handleSubmitClick = (e) => {
+  const handleSubmitClick = async (e) => {
     e.preventDefault();
+    await listData.add({
+      // writing a new document to firestore with the select values/fields
+      name: groceryItem,
+      frequency: howSoon,
+      token: 'token',
+      createdAt: Date.now(),
+      purchaseDate: purchaseDate,
+    });
+
     setGroceryItem('');
     setHowSoon(null);
   };
-
-  // return (
-  //   <>
-  //     <h1>Add an Item</h1>
-  //     <form onSubmit>
-  //       <p>Item name:</p>
-  //       <input
-  //         type="text"
-  //         value={groceryItem}
-  //         onChange={itemInputChange}
-  //         />
-  //         <div className="radio-button">
-  //           Soon
-  //           <input
-  //             type="radio"
-  //             value="7"
-  //             name="howSoon"
-  //             onChange={radioInputChange}
-  //             checked={howSoon === 7}
-  //           />
-  //         </div>
-  //         <div className="radio-button">
-  //           Kind of Soon
-  //           <input
-  //             type="radio"
-  //             value="14"
-  //             name="howSoon"
-  //             onChange={radioInputChange}
-  //             checked={howSoon === 14}
-  //           />
-  //         </div>
-  //         <div className="radio-button">
-  //           Not Soon
-  //           <input
-  //             type="radio"
-  //             value="30"
-  //             name="howSoon"
-  //             onChange={radioInputChange}
-  //             checked={howSoon === 30}
-  //           />
-  //         </div>
-  //         <button
-  //           className="add-item-button"
-  //           onSubmit={handleSubmitClick}
-  //         >
-  //           Add item
-  //         </button>
-  //     </form>
-  //   </>
-  //   )
 
   return (
     <main className="add-item">
@@ -92,7 +53,6 @@ const AddItem = () => {
         <fieldset>
           <p>How soon will you buy this again?</p>
           <div className="radio-group-container">
-            <label htmlFor="soon">Soon</label>
             <input
               id="soon"
               value="7"
@@ -101,9 +61,10 @@ const AddItem = () => {
               onChange={radioInputChange}
               checked={howSoon === 7}
             />
+            <label htmlFor="soon"> Soon</label>
+
             <br />
 
-            <label htmlFor="kinda-soon">Kind of Soon</label>
             <input
               id="kinda-soon"
               value="14"
@@ -112,9 +73,10 @@ const AddItem = () => {
               onChange={radioInputChange}
               checked={howSoon === 14}
             />
+            <label htmlFor="kinda-soon"> Kind of Soon</label>
+
             <br />
 
-            <label htmlFor="not-soon">Not Soon</label>
             <input
               id="not-soon"
               value="30"
@@ -123,9 +85,25 @@ const AddItem = () => {
               onChange={radioInputChange}
               checked={howSoon === 30}
             />
+            <label htmlFor="not-soon"> Not Soon</label>
           </div>
         </fieldset>{' '}
         <br />
+        {/* 
+
+        extra form option for purchase date 
+        
+        <label htmlFor="purchaseDate">
+          Date of Purchase:
+          <input
+            id="purchaseDate"
+            name="addItem"
+            type="date"
+            value={purchaseDate}
+            onChange={dateInputChange}
+          />
+        </label> */}
+        <br></br>
         <input type="submit" value="Add to Shopping List" />
       </form>
     </main>
