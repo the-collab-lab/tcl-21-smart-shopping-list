@@ -4,7 +4,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import GroceryItem from '../GroceryItem/GroceryItem';
 
 const List = () => {
-  const token = 'token';
+  const { token } = props;
   const listData = firestore.collection('groceryItems');
   const query = listData.orderBy('createdAt'); // query the subset of documents and order them by date
   const [lists] = useCollectionData(query, { idField: 'id' }); // listen and re-render documents in real time
