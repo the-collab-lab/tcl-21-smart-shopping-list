@@ -2,19 +2,19 @@ import React, { useEffect } from 'react';
 import NavBar from '../NavBar/NavBar';
 import { useHistory } from 'react-router-dom';
 
-const List = (props) => {
+const List = ({ token, setToken }) => {
   const history = useHistory();
 
   // Removes Token from Local Storage; trying to implement with Global State
-  const clearToken = (props) => {
+  const clearToken = () => {
     window.localStorage.removeItem('token');
-    props.setToken('');
+    setToken('');
     history.push('/');
   };
 
   return (
     <>
-      {!props.token ? (
+      {!token ? (
         history.push('/')
       ) : (
         <div>
