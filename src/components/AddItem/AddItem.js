@@ -25,7 +25,7 @@ const AddItem = () => {
       // writing a new document to firestore with the select values/fields
       name: groceryItem,
       frequency: howSoon,
-      token: 'token',
+      token: window.localStorage.getItem('token'),
       createdAt: Date.now(),
       purchaseDate: purchaseDate,
     });
