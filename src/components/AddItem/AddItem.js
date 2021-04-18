@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { firestore } from '../../lib/firebase.js';
+import NavBar from '../NavBar/NavBar';
 
 const AddItem = () => {
   const [groceryItem, setGroceryItem] = useState('');
@@ -36,6 +37,7 @@ const AddItem = () => {
 
   return (
     <main className="add-item">
+      <NavBar />
       <h1>Add Item</h1>
       <form onSubmit={handleSubmitClick}>
         <label htmlFor="addItem">
