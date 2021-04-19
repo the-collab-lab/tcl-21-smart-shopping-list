@@ -6,12 +6,11 @@ import NavBar from '../NavBar/NavBar';
 import { useHistory } from 'react-router-dom';
 
 const List = ({ token, setToken }) => {
-  const listData = firestore.collection('groceryItems'); // decided to connect with the 'groceryitems' Collection to see if it will render and successfully it does. Ultimately we want to get the 'Items' Collection inside of 'Lists'
-  const query = listData.orderBy('createdAt');
+  const listData = firestore.collection('groceryItems');
+  const query = listData.where('token', '==', token);
   const [groceryItems] = useCollectionData(query, { idField: 'id' });
   const history = useHistory();
 
-  // Removes Token from Local Storage; trying to implement with Global State
   const clearToken = () => {
     window.localStorage.removeItem('token');
     setToken('');
@@ -21,6 +20,7 @@ const List = ({ token, setToken }) => {
   return (
     <>
       <h1>Current List</h1>
+      <p>Current token: {token}</p>
       {!token ? (
         history.push('/')
       ) : (
@@ -32,7 +32,7 @@ const List = ({ token, setToken }) => {
       )}
       <div className="each-item">
         <ul>
-          {groceryItems && // map over the array of list items
+          {groceryItems &&
             groceryItems.map((list) => (
               <GroceryItem key={list.id} list={list} />
             ))}
