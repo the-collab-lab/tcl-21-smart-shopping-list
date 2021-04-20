@@ -6,9 +6,10 @@ import NavBar from '../NavBar/NavBar';
 import { useHistory } from 'react-router-dom';
 
 const List = ({ token, setToken }) => {
-  const listData = firestore.collection('groceryItems');
-  const query = listData.where('token', '==', token);
-  const [groceryItems] = useCollectionData(query, { idField: 'id' });
+  // const listData = firestore.collection('groceryItems');
+  const listData = firestore.collection(token);
+  // const query = listData.where('token', '==', token);
+  const [groceryItems] = useCollectionData(listData, { idField: 'id' });
   const history = useHistory();
 
   const clearToken = () => {

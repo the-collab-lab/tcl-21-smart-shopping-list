@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import getToken from '../../lib/tokens';
 import { useHistory } from 'react-router-dom';
 import { firestore } from '../../lib/firebase';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 const WelcomeScreen = ({ token, setToken }) => {
   const [oldToken, setOldToken] = useState('');
@@ -10,23 +11,27 @@ const WelcomeScreen = ({ token, setToken }) => {
 
   const getTokens = async () => {
     const token = getToken();
-    try {
-      await firestore.collection('lists').doc(token).set({
-        name: token,
-        createdAt: Date.now(),
-      });
-      window.localStorage.setItem('token', token);
-      setToken(token);
-    } catch (error) {
-      console.log('Error creating list in db: ', error);
-    }
+    window.localStorage.setItem('token', token);
+    setToken(token);
+    // try {
+    //   await firestore.collection('lists').doc(token).set({
+    //     name: token,
+    //     createdAt: Date.now(),
+    //   });
+    //   window.localStorage.setItem('token', token);
+    //   setToken(token);
+    // } catch (error) {
+    //   console.log('Error creating list in db: ', error);
+    // }
   };
 
   const handleExistingToken = async (e) => {
     e.preventDefault();
     try {
-      const doc = await firestore.collection('lists').doc(oldToken).get();
-      if (doc.exists) {
+      // const doc = await firestore.collection('lists').doc(oldToken).get();
+      const listRef = await firestore.collection(oldToken).get();
+
+      if (listRef.docs.length) {
         window.localStorage.setItem('token', oldToken);
         setToken(oldToken);
         setErrorMsg('');
