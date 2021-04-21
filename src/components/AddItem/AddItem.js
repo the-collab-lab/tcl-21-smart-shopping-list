@@ -49,24 +49,34 @@ const AddItem = () => {
 
   const duplicateItem = async (item) => {
     let existingItem = false;
+    console.log('token:', localStorage.getItem('token'));
     await firestore // this is new syntax that can apply the sanitize to each individual item using 'querySnapshot'
       .collection(localStorage.getItem('token'))
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
+          /*console.log(
+            'doc.data().name: ',
+            doc.data().name,
+
+            cleanUserInput(doc.data().name) === cleanUserInput(item),
+        );*/
+
           // the 'doc' was a property from the firestore docs to I'm trying it out here
           if (
             // created this if statement to target and apply sanitizer to the user input
-            cleanUserInput(doc.data().itemName) === cleanUserInput(item)
+            cleanUserInput(doc.data().name) === cleanUserInput(item)
           ) {
             existingItem = true;
           }
         });
       })
-      .catch(() => {
+      .catch((e) => {
         // trying to get this to function and apply to the correct conditions
         alert('Sorry, something went wrong!');
+        console.log('Here it is!', e);
       });
+
     return existingItem;
   };
 
@@ -126,10 +136,10 @@ const AddItem = () => {
           </div>
         </fieldset>{' '}
         <br />
-        {/* 
+        {/*
 
-        extra form option for purchase date 
-        
+        extra form option for purchase date
+
         <label htmlFor="purchaseDate">
           Date of Purchase:
           <input

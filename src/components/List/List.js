@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { firestore } from '../../lib/firebase.js';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import GroceryItem from '../GroceryItem/GroceryItem';
