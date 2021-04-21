@@ -4,35 +4,70 @@ import NavBar from '../NavBar/NavBar';
 
 const AddItem = () => {
   const [groceryItem, setGroceryItem] = useState('');
-  const [purchaseDate, setPurchaseDate] = useState(null);
   const [howSoon, setHowSoon] = useState(null);
-  const listData = firestore.collection('groceryItems');
+  // const listData = firestore.collection('groceryItems'); commented out due to not wanting to direct to the 'groceryItems' collection but use the entire database instead
 
   const itemInputChange = (e) => {
     setGroceryItem(e.target.value);
   };
 
-  const dateInputChange = (e) => {
-    setPurchaseDate(e.target.value);
-  };
   const radioInputChange = (e) => {
     setHowSoon(parseInt(e.target.value));
     console.log(howSoon);
   };
 
+  const cleanUserInput = (item) => {
+    // Step 1: Sanitizing and trying out the regular expression symbols and converting to lowercase
+    return item.replace(/[\W_]+/g, '').toLowerCase();
+  };
+
   const handleSubmitClick = async (e) => {
     e.preventDefault();
-    await listData.add({
-      // writing a new document to firestore with the select values/fields
+
+    const existingItem = await duplicateItem(groceryItem); // Step 2: I'm trying to add a new function as a addon that will check for dupe items with an alert
+    if (existingItem) {
+      // **== I'm stuck on trying to get it to work!! ===**
+      alert('The Item already exists!');
+
+      setGroceryItem('');
+      setHowSoon(null);
+      return;
+    }
+
+    firestore.collection(localStorage.getItem('token')).add({
+      // new format that allows storage of a item under the right token
+      // writing a new document to firestore with these values/fields
       name: groceryItem,
-      frequency: howSoon,
-      token: window.localStorage.getItem('token'),
+      howSoon: howSoon,
       createdAt: Date.now(),
-      purchaseDate: purchaseDate,
+      purchaseDate: null,
     });
 
     setGroceryItem('');
     setHowSoon(null);
+  };
+
+  const duplicateItem = async (item) => {
+    let existingItem = false;
+    await firestore // this is new syntax that can apply the sanitize to each individual item using 'querySnapshot'
+      .collection(localStorage.getItem('token'))
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          // the 'doc' was a property from the firestore docs to I'm trying it out here
+          if (
+            // created this if statement to target and apply sanitizer to the user input
+            cleanUserInput(doc.data().itemName) === cleanUserInput(item)
+          ) {
+            existingItem = true;
+          }
+        });
+      })
+      .catch(() => {
+        // trying to get this to function and apply to the correct conditions
+        alert('Sorry, something went wrong!');
+      });
+    return existingItem;
   };
 
   return (

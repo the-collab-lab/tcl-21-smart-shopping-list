@@ -6,9 +6,12 @@ import NavBar from '../NavBar/NavBar';
 import { useHistory } from 'react-router-dom';
 
 const List = ({ token, setToken }) => {
-  const listData = firestore.collection('groceryItems'); // decided to connect with the 'groceryitems' Collection to see if it will render and successfully it does. Ultimately we want to get the 'Items' Collection inside of 'Lists'
-  const query = listData.orderBy('createdAt');
-  const [groceryItems] = useCollectionData(query, { idField: 'id' });
+  const [listData] = useCollectionData(
+    firestore //changed the 'listData' variable to the entire database to render different collections instead of the one "groceryItems" collection
+      .collection(localStorage.getItem('token'))
+      .orderBy('createdAt'),
+  );
+
   const history = useHistory();
 
   // Removes Token from Local Storage; trying to implement with Global State
@@ -26,16 +29,15 @@ const List = ({ token, setToken }) => {
       ) : (
         <div>
           <div>Current List</div>
-          <button onClick={clearToken}>Clear Current Token</button>
+          <button onClick={clearToken}>Clear Current Token</button>{' '}
+          {/*This button literally clears and resets the list and token*/}
           <NavBar />
         </div>
       )}
       <div className="each-item">
         <ul>
-          {groceryItems && // map over the array of list items
-            groceryItems.map((list) => (
-              <GroceryItem key={list.id} list={list} />
-            ))}
+          {listData && // map over the array of list items with the given token
+            listData.map((list) => <GroceryItem key={list.id} list={list} />)}
         </ul>
       </div>
     </>
