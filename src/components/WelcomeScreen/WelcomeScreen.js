@@ -36,7 +36,7 @@ const WelcomeScreen = ({ token, setToken }) => {
         setToken(oldToken);
         setErrorMsg('');
       } else {
-        setErrorMsg("Token doesn't exist");
+        setErrorMsg(`Token '${oldToken}' doesn't exist.`);
       }
     } catch (error) {
       console.log('Error retrieving list: ', error);
@@ -48,22 +48,32 @@ const WelcomeScreen = ({ token, setToken }) => {
       {token ? (
         history.push('/list')
       ) : (
-        <div>
+        <>
           <h1>Welcome to your Smart Shopping list!</h1>
-          <button onClick={getTokens}>Create a new list</button>
+          <button data-testid="createListButton" onClick={getTokens}>
+            Create a new list
+          </button>
           <p>- or -</p>
           <p>Join an existing shopping list by entering a three word token.</p>
           <p>Share token</p>
           <form onSubmit={handleExistingToken}>
+            <label htmlFor="oldToken" className="hide-element">
+              Share Token
+            </label>
             <input
               type="text"
+              id="oldToken"
               value={oldToken}
               onChange={(e) => setOldToken(e.target.value)}
             />
-            <button>Join an existing list</button>
+            <button data-testid="joinListButton" disabled={!oldToken}>
+              Join an existing list
+            </button>
           </form>
-          <p>{errorMsg}</p>
-        </div>
+          <p data-testid="errorMsg" style={{ color: 'red' }}>
+            {errorMsg}
+          </p>
+        </>
       )}
     </>
   );

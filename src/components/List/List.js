@@ -20,16 +20,25 @@ const List = ({ token, setToken }) => {
 
   return (
     <>
-      <h1>Current List</h1>
-      <p>Current token: {token}</p>
       {!token ? (
         history.push('/')
       ) : (
-        <div>
-          <div>Current List</div>
-          <button onClick={clearToken}>Clear Current Token</button>
+        <>
+          <h1>Current List</h1>
+          <p>Current token: {token}</p>
+          <button data-testid="clearTokenButton" onClick={clearToken}>
+            Clear Current Token
+          </button>
+          <div className="each-item">
+            <ul>
+              {groceryItems &&
+                groceryItems.map((list) => (
+                  <GroceryItem key={list.id} list={list} />
+                ))}
+            </ul>
+          </div>
           <NavBar />
-        </div>
+        </>
       )}
       <div className="each-item">
         <ul>

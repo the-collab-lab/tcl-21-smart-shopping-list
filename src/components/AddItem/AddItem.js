@@ -36,8 +36,7 @@ const AddItem = () => {
   };
 
   return (
-    <main className="add-item">
-      <NavBar />
+    <React.Fragment className="add-item">
       <h1>Add Item</h1>
       <form onSubmit={handleSubmitClick}>
         <label htmlFor="addItem">
@@ -91,10 +90,7 @@ const AddItem = () => {
           </div>
         </fieldset>{' '}
         <br />
-        {/* 
-
-        extra form option for purchase date 
-        
+        {/* extra form option for purchase date 
         <label htmlFor="purchaseDate">
           Date of Purchase:
           <input
@@ -105,10 +101,11 @@ const AddItem = () => {
             onChange={dateInputChange}
           />
         </label> */}
-        <br></br>
+        {/* <br></br> */}
         <input type="submit" value="Add to Shopping List" />
       </form>
-    </main>
+      <NavBar />
+    </React.Fragment>
   );
 };
 
