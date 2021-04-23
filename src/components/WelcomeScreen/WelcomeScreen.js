@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import getToken from '../../lib/tokens';
 import { useHistory } from 'react-router-dom';
 import { firestore } from '../../lib/firebase';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 const WelcomeScreen = ({ token, setToken }) => {
   const [oldToken, setOldToken] = useState('');
@@ -10,28 +9,37 @@ const WelcomeScreen = ({ token, setToken }) => {
   const history = useHistory();
 
   const getTokens = async () => {
-    const token = getToken();
-    window.localStorage.setItem('token', token);
-    setToken(token);
-    // try {
-    //   await firestore.collection('lists').doc(token).set({
-    //     name: token,
-    //     createdAt: Date.now(),
-    //   });
-    //   window.localStorage.setItem('token', token);
-    //   setToken(token);
-    // } catch (error) {
-    //   console.log('Error creating list in db: ', error);
-    // }
+    const newToken = getToken();
+
+    // Option 1: A&V's Implementation
+    try {
+      // Using the 'set' method over the 'add' method b/c we want to create our own doc id that is equal to the token for easy referencing later
+      await firestore.collection('lists').doc(newToken).set({
+        name: newToken,
+        createdAt: Date.now(),
+      });
+      window.localStorage.setItem('token', newToken);
+      setToken(newToken);
+    } catch (error) {
+      console.log('Error creating list in db: ', error);
+    }
+
+    // Option 2: Compatible with T&T's Implementation
+    // window.localStorage.setItem('token', newToken);
+    // setToken(newToken);
   };
 
   const handleExistingToken = async (e) => {
     e.preventDefault();
-    try {
-      // const doc = await firestore.collection('lists').doc(oldToken).get();
-      const listRef = await firestore.collection(oldToken).get();
 
-      if (listRef.docs.length) {
+    try {
+      // Option 1: A&V's Implementation
+      const doc = await firestore.collection('lists').doc(oldToken).get();
+      if (doc.exists) {
+        // Option 2: Compatible with T&T's Implementation
+        // const querySnapshot = await firestore.collection(oldToken).get();
+        // if (querySnapshot.docs.length) {
+
         window.localStorage.setItem('token', oldToken);
         setToken(oldToken);
         setErrorMsg('');
@@ -55,11 +63,8 @@ const WelcomeScreen = ({ token, setToken }) => {
           </button>
           <p>- or -</p>
           <p>Join an existing shopping list by entering a three word token.</p>
-          <p>Share token</p>
           <form onSubmit={handleExistingToken}>
-            <label htmlFor="oldToken" className="hide-element">
-              Share Token
-            </label>
+            <label htmlFor="oldToken">Share Token:</label>
             <input
               type="text"
               id="oldToken"
@@ -70,7 +75,7 @@ const WelcomeScreen = ({ token, setToken }) => {
               Join an existing list
             </button>
           </form>
-          <p data-testid="errorMsg" style={{ color: 'red' }}>
+          <p data-testid="errorMsg" className="red-text">
             {errorMsg}
           </p>
         </>

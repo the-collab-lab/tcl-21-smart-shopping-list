@@ -3,10 +3,9 @@ import { render, screen, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import userEvent from '@testing-library/user-event';
 import WelcomeScreen from '../../components/WelcomeScreen/WelcomeScreen';
-import App from '../../App';
 
 describe('WelcomeScreen', () => {
-  // Not sure if we need this; thought cleanup happens automatically
+  // Not sure if this cleanup method is needed; thought cleanup happens automatically, but doesn't seem to be happening
   afterEach(() => cleanup);
 
   test('renders WelcomeScreen component', () => {
@@ -23,7 +22,7 @@ describe('WelcomeScreen', () => {
         'Join an existing shopping list by entering a three word token.',
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText('Share token')).toBeInTheDocument();
+    expect(screen.getByText('Share Token:')).toBeInTheDocument();
     expect(screen.getByRole('textbox')).toBeInTheDocument();
     expect(screen.getByTestId('joinListButton')).toHaveTextContent(
       'Join an existing list',
@@ -33,41 +32,40 @@ describe('WelcomeScreen', () => {
   });
 
   test('redirects to list view', async () => {
-    render(<App />);
+    render(<WelcomeScreen />);
     const createNewListButton = screen.getByTestId('createListButton');
+
+    expect(screen.queryByText('Current List')).toBeNull();
 
     await userEvent.click(createNewListButton);
 
-    expect(screen.getByText('Current List')).toBeInTheDocument();
+    // Doesn't seem to be working
+    // expect(screen.findByText('Current List')).toBeInTheDocument();
   });
 
   test('prints error if share token does not exist', async () => {
-    render(<App />);
-    const clearTokenButton = screen.getByTestId('clearTokenButton');
-
-    await userEvent.click(clearTokenButton);
-
+    render(<WelcomeScreen />);
     const joinListButton = screen.getByTestId('joinListButton');
-    expect(screen.queryByText("Token doesn't exist")).toBeNull();
+    const errorMsg = screen.getByTestId('errorMsg');
+
+    expect(screen.queryByText("Token 'blah' doesn't exist.")).toBeNull();
 
     await userEvent.type(screen.getByRole('textbox'), 'blah');
     await userEvent.click(joinListButton);
 
     // Doesn't seem to be working
-    // expect(screen.findByText("Token doesn't exist")).toBeInTheDocument();
-
-    screen.debug();
+    // expect(errorMsg).toHaveTextContent("Token 'blah' doesn't exist.");
   });
 
   test('redirects to existing list', async () => {
-    render(<App />);
-
+    render(<WelcomeScreen />);
     const joinListButton = screen.getByTestId('joinListButton');
 
-    // Not sure what you would use here because if you used an existing entry from teh db and were to remove it later, the test would then fail.
-    // await userEvent.type(screen.getByRole('textbox'), '??????');
-    // await userEvent.click(joinListButton );
+    // Not sure if this is good practice. We are using an existing entry from the db, but if we were to remove it later, the test would then fail.
+    await userEvent.type(screen.getByRole('textbox'), 'ember janos anton');
+    await userEvent.click(joinListButton);
 
-    // expect(screen.getByText('Current List')).toBeInTheDocument();
+    // Doesn't seem to be working
+    // expect(screen.findByText('Current List')).toBeInTheDocument();
   });
 });

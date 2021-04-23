@@ -22,8 +22,8 @@ const AddItem = () => {
 
   const handleSubmitClick = async (e) => {
     e.preventDefault();
+
     await listData.add({
-      // writing a new document to firestore with the select values/fields
       name: groceryItem,
       frequency: howSoon,
       token: window.localStorage.getItem('token'),
@@ -63,9 +63,7 @@ const AddItem = () => {
               checked={howSoon === 7}
             />
             <label htmlFor="soon"> Soon</label>
-
             <br />
-
             <input
               id="kinda-soon"
               value="14"
@@ -75,9 +73,7 @@ const AddItem = () => {
               checked={howSoon === 14}
             />
             <label htmlFor="kinda-soon"> Kind of Soon</label>
-
             <br />
-
             <input
               id="not-soon"
               value="30"

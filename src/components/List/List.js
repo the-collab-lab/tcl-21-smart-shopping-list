@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { firestore } from '../../lib/firebase.js';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import GroceryItem from '../GroceryItem/GroceryItem';
@@ -6,10 +6,14 @@ import NavBar from '../NavBar/NavBar';
 import { useHistory } from 'react-router-dom';
 
 const List = ({ token, setToken }) => {
-  // const listData = firestore.collection('groceryItems');
-  const listData = firestore.collection(token);
-  // const query = listData.where('token', '==', token);
-  const [groceryItems] = useCollectionData(listData, { idField: 'id' });
+  // Option 1: A&V's Implementation
+  const groceryItemsRef = firestore.collection('groceryItems');
+  const query = groceryItemsRef.where('token', '==', token);
+
+  // Option 2: Compatible with T&T's Implementation
+  // const query = firestore.collection(token);
+
+  const [groceryItems] = useCollectionData(query, { idField: 'id' });
   const history = useHistory();
 
   const clearToken = () => {
@@ -25,29 +29,23 @@ const List = ({ token, setToken }) => {
       ) : (
         <>
           <h1>Current List</h1>
-          <p>Current token: {token}</p>
+          <p>
+            Share your token: <strong>{token}</strong>
+          </p>
           <button data-testid="clearTokenButton" onClick={clearToken}>
-            Clear Current Token
+            Return to welcome screen
           </button>
-          <div className="each-item">
+          <div className="grocery-list">
             <ul>
               {groceryItems &&
-                groceryItems.map((list) => (
-                  <GroceryItem key={list.id} list={list} />
+                groceryItems.map((item) => (
+                  <GroceryItem key={item.id} item={item} />
                 ))}
             </ul>
           </div>
           <NavBar />
         </>
       )}
-      <div className="each-item">
-        <ul>
-          {groceryItems &&
-            groceryItems.map((list) => (
-              <GroceryItem key={list.id} list={list} />
-            ))}
-        </ul>
-      </div>
     </>
   );
 };
