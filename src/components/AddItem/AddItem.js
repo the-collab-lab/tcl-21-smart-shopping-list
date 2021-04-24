@@ -22,9 +22,9 @@ const AddItem = () => {
   const handleSubmitClick = async (e) => {
     e.preventDefault();
 
+    // alert for existing item when user submits the form
     const existingItem = await duplicateItem(groceryItem);
     if (existingItem) {
-      // alert for existing item when user submits the form
       alert('The Item already exists!');
 
       setGroceryItem('');
@@ -32,8 +32,8 @@ const AddItem = () => {
       return;
     }
 
+    // connecting to the firestore with the select fields
     firestore.collection(localStorage.getItem('token')).add({
-      // connecting to the firestore with the select fields
       name: groceryItem,
       howSoon: howSoon,
       createdAt: Date.now(),
@@ -44,6 +44,7 @@ const AddItem = () => {
     setHowSoon(null);
   };
 
+  // targeting the name within the database to check sanitized versions
   const duplicateItem = async (item) => {
     let existingItem = false;
     console.log('token:', localStorage.getItem('token'));
@@ -51,7 +52,6 @@ const AddItem = () => {
       .collection(localStorage.getItem('token'))
       .get()
       .then((querySnapshot) => {
-        // targeting the name within the database to check sanitized versions
         querySnapshot.forEach((doc) => {
           if (cleanUserInput(doc.data().name) === cleanUserInput(item)) {
             existingItem = true;
@@ -59,8 +59,8 @@ const AddItem = () => {
         });
       })
 
+      // alert that catches an error
       .catch((e) => {
-        // alert that catches an error
         alert('Sorry, something went wrong!');
       });
 

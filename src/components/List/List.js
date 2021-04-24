@@ -7,9 +7,7 @@ import { useHistory } from 'react-router-dom';
 
 const List = ({ token, setToken }) => {
   const [listData] = useCollectionData(
-    firestore //changed the 'listData' variable to the entire database to render different collections instead of the one "groceryItems" collection
-      .collection(localStorage.getItem('token'))
-      .orderBy('createdAt'),
+    firestore.collection(localStorage.getItem('token')).orderBy('createdAt'),
   );
 
   const history = useHistory();
@@ -29,9 +27,7 @@ const List = ({ token, setToken }) => {
       ) : (
         <div>
           <div>Current List</div>
-          <button onClick={clearToken}>Clear Current Token</button>{' '}
-          {/*This button literally clears and resets the list and token*/}
-          <NavBar />
+          <button onClick={clearToken}>Clear Current Token</button> <NavBar />
         </div>
       )}
       <div className="each-item">
