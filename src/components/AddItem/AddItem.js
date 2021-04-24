@@ -5,7 +5,6 @@ import NavBar from '../NavBar/NavBar';
 const AddItem = () => {
   const [groceryItem, setGroceryItem] = useState('');
   const [howSoon, setHowSoon] = useState(null);
-  // const listData = firestore.collection('groceryItems'); commented out due to not wanting to direct to the 'groceryItems' collection but use the entire database instead
 
   const itemInputChange = (e) => {
     setGroceryItem(e.target.value);
@@ -17,16 +16,15 @@ const AddItem = () => {
   };
 
   const cleanUserInput = (item) => {
-    // Step 1: Sanitizing and trying out the regular expression symbols and converting to lowercase
-    return item.replace(/[\W_]+/g, '').toLowerCase();
+    return item.replace(/[\W_]+/g, '').toLowerCase(); // using regular expression to sanitize
   };
 
   const handleSubmitClick = async (e) => {
     e.preventDefault();
 
-    const existingItem = await duplicateItem(groceryItem); // Step 2: I'm trying to add a new function as a addon that will check for dupe items with an alert
+    const existingItem = await duplicateItem(groceryItem);
     if (existingItem) {
-      // **== I'm stuck on trying to get it to work!! ===**
+      // alert for existing item when user submits the form
       alert('The Item already exists!');
 
       setGroceryItem('');
@@ -35,8 +33,7 @@ const AddItem = () => {
     }
 
     firestore.collection(localStorage.getItem('token')).add({
-      // new format that allows storage of a item under the right token
-      // writing a new document to firestore with these values/fields
+      // connecting to the firestore with the select fields
       name: groceryItem,
       howSoon: howSoon,
       createdAt: Date.now(),
@@ -50,31 +47,21 @@ const AddItem = () => {
   const duplicateItem = async (item) => {
     let existingItem = false;
     console.log('token:', localStorage.getItem('token'));
-    await firestore // this is new syntax that can apply the sanitize to each individual item using 'querySnapshot'
+    await firestore
       .collection(localStorage.getItem('token'))
       .get()
       .then((querySnapshot) => {
+        // targeting the name within the database to check sanitized versions
         querySnapshot.forEach((doc) => {
-          /*console.log(
-            'doc.data().name: ',
-            doc.data().name,
-
-            cleanUserInput(doc.data().name) === cleanUserInput(item),
-        );*/
-
-          // the 'doc' was a property from the firestore docs to I'm trying it out here
-          if (
-            // created this if statement to target and apply sanitizer to the user input
-            cleanUserInput(doc.data().name) === cleanUserInput(item)
-          ) {
+          if (cleanUserInput(doc.data().name) === cleanUserInput(item)) {
             existingItem = true;
           }
         });
       })
+
       .catch((e) => {
-        // trying to get this to function and apply to the correct conditions
+        // alert that catches an error
         alert('Sorry, something went wrong!');
-        console.log('Here it is!', e);
       });
 
     return existingItem;
@@ -136,21 +123,6 @@ const AddItem = () => {
           </div>
         </fieldset>{' '}
         <br />
-        {/*
-
-        extra form option for purchase date
-
-        <label htmlFor="purchaseDate">
-          Date of Purchase:
-          <input
-            id="purchaseDate"
-            name="addItem"
-            type="date"
-            value={purchaseDate}
-            onChange={dateInputChange}
-          />
-        </label> */}
-        <br></br>
         <input type="submit" value="Add to Shopping List" />
       </form>
     </main>
