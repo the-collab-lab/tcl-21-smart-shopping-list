@@ -20,7 +20,7 @@ function App() {
             <List token={token} setToken={setToken} />
           </Route>
           <Route path="/additem">
-            <AddItem />
+            <AddItem token={token} />
           </Route>
           <Route path="/firestore">
             <FirestoreTest />
