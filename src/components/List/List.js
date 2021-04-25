@@ -6,13 +6,16 @@ import NavBar from '../NavBar/NavBar';
 import { useHistory } from 'react-router-dom';
 
 const List = ({ token, setToken }) => {
-  const [listData] = useCollectionData(
-    firestore.collection(localStorage.getItem('token')).orderBy('createdAt'),
-  );
+  // Option 1: A&V's Implementation
+  const groceryItemsRef = firestore.collection('groceryItems');
+  const query = groceryItemsRef.where('token', '==', token);
 
+  // Option 2: Compatible with T&T's Implementation
+  // const query = firestore.collection(token);
+
+  const [groceryItems] = useCollectionData(query, { idField: 'id' });
   const history = useHistory();
 
-  // Removes Token from Local Storage; trying to implement with Global State
   const clearToken = () => {
     window.localStorage.removeItem('token');
     setToken('');
@@ -21,21 +24,28 @@ const List = ({ token, setToken }) => {
 
   return (
     <>
-      <h1>Current List</h1>
       {!token ? (
         history.push('/')
       ) : (
-        <div>
-          <div>Current List</div>
-          <button onClick={clearToken}>Clear Current Token</button> <NavBar />
-        </div>
+        <>
+          <h1>Current List</h1>
+          <p>
+            Share your token: <strong>{token}</strong>
+          </p>
+          <button data-testid="clearTokenButton" onClick={clearToken}>
+            Return to welcome screen
+          </button>
+          <div className="grocery-list">
+            <ul>
+              {groceryItems &&
+                groceryItems.map((item) => (
+                  <GroceryItem key={item.id} item={item} />
+                ))}
+            </ul>
+          </div>
+          <NavBar />
+        </>
       )}
-      <div className="each-item">
-        <ul>
-          {listData && // map over the array of list items with the given token
-            listData.map((list) => <GroceryItem key={list.id} list={list} />)}
-        </ul>
-      </div>
     </>
   );
 };

@@ -11,7 +11,7 @@ function App() {
 
   return (
     <Router>
-      <div className="main-div">
+      <main className="main-div">
         <Switch>
           <Route exact path="/">
             <WelcomeScreen token={token} setToken={setToken} />
@@ -20,13 +20,13 @@ function App() {
             <List token={token} setToken={setToken} />
           </Route>
           <Route path="/additem">
-            <AddItem />
+            <AddItem token={token} />
           </Route>
           <Route path="/firestore">
             <FirestoreTest />
           </Route>
         </Switch>
-      </div>
+      </main>
     </Router>
   );
 }

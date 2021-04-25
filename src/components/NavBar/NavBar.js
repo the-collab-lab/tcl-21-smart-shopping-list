@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const NavBar = () => {
   return (
-    <div className="listviews">
+    <footer className="listviews">
       <button>
         <Link className="list-item" to="/firestore">
           Firestore
@@ -19,7 +19,7 @@ const NavBar = () => {
           Add Item
         </Link>
       </button>
-    </div>
+    </footer>
   );
 };
 

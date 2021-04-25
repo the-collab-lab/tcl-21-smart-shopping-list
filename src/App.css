@@ -47,3 +47,11 @@
 .list-item:active {
   font-weight: bold;
 }
+
+.red-text {
+  color: red;
+}
+
+.error-message {
+  color: red;
+}

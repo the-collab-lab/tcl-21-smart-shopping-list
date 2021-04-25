@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { firestore } from '../../lib/firebase.js';
 import NavBar from '../NavBar/NavBar';
 
-const AddItem = () => {
+const AddItem = (props) => {
   const [groceryItem, setGroceryItem] = useState('');
   const [howSoon, setHowSoon] = useState(null);
 
@@ -33,11 +33,12 @@ const AddItem = () => {
     }
 
     // connecting to the firestore with the select fields
-    firestore.collection(localStorage.getItem('token')).add({
+    firestore.collection('groceryItems').add({
       name: groceryItem,
       howSoon: howSoon,
       createdAt: Date.now(),
       purchaseDate: null,
+      token: props.token,
     });
 
     setGroceryItem('');
@@ -49,7 +50,8 @@ const AddItem = () => {
     let existingItem = false;
     console.log('token:', localStorage.getItem('token'));
     await firestore
-      .collection(localStorage.getItem('token'))
+      .collection('groceryItems')
+      .where('token', '==', props.token)
       .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
@@ -68,8 +70,7 @@ const AddItem = () => {
   };
 
   return (
-    <main className="add-item">
-      <NavBar />
+    <section className="add-item">
       <h1>Add Item</h1>
       <form onSubmit={handleSubmitClick}>
         <label htmlFor="addItem">
@@ -96,9 +97,7 @@ const AddItem = () => {
               checked={howSoon === 7}
             />
             <label htmlFor="soon"> Soon</label>
-
             <br />
-
             <input
               id="kinda-soon"
               value="14"
@@ -108,9 +107,7 @@ const AddItem = () => {
               checked={howSoon === 14}
             />
             <label htmlFor="kinda-soon"> Kind of Soon</label>
-
             <br />
-
             <input
               id="not-soon"
               value="30"
@@ -125,7 +122,8 @@ const AddItem = () => {
         <br />
         <input type="submit" value="Add to Shopping List" />
       </form>
-    </main>
+      <NavBar />
+    </section>
   );
 };
 
