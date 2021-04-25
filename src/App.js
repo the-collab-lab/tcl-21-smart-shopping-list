@@ -11,7 +11,7 @@ function App() {
 
   return (
     <Router>
-      <div className="main-div">
+      <main className="main-div">
         <Switch>
           <Route exact path="/">
             <WelcomeScreen token={token} setToken={setToken} />
@@ -26,7 +26,7 @@ function App() {
             <FirestoreTest />
           </Route>
         </Switch>
-      </div>
+      </main>
     </Router>
   );
 }

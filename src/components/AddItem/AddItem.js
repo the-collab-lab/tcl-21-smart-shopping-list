@@ -22,8 +22,8 @@ const AddItem = () => {
 
   const handleSubmitClick = async (e) => {
     e.preventDefault();
+
     await listData.add({
-      // writing a new document to firestore with the select values/fields
       name: groceryItem,
       frequency: howSoon,
       token: window.localStorage.getItem('token'),
@@ -36,8 +36,7 @@ const AddItem = () => {
   };
 
   return (
-    <main className="add-item">
-      <NavBar />
+    <section className="add-item">
       <h1>Add Item</h1>
       <form onSubmit={handleSubmitClick}>
         <label htmlFor="addItem">
@@ -64,9 +63,7 @@ const AddItem = () => {
               checked={howSoon === 7}
             />
             <label htmlFor="soon"> Soon</label>
-
             <br />
-
             <input
               id="kinda-soon"
               value="14"
@@ -76,9 +73,7 @@ const AddItem = () => {
               checked={howSoon === 14}
             />
             <label htmlFor="kinda-soon"> Kind of Soon</label>
-
             <br />
-
             <input
               id="not-soon"
               value="30"
@@ -91,24 +86,10 @@ const AddItem = () => {
           </div>
         </fieldset>{' '}
         <br />
-        {/* 
-
-        extra form option for purchase date 
-        
-        <label htmlFor="purchaseDate">
-          Date of Purchase:
-          <input
-            id="purchaseDate"
-            name="addItem"
-            type="date"
-            value={purchaseDate}
-            onChange={dateInputChange}
-          />
-        </label> */}
-        <br></br>
         <input type="submit" value="Add to Shopping List" />
       </form>
-    </main>
+      <NavBar />
+    </section>
   );
 };
 

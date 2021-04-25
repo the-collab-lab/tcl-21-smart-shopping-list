@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const GroceryItem = ({ list }) => {
+const GroceryItem = ({ item }) => {
   return (
     <>
-      <li>{list.name}</li>
+      <li>{item.name}</li>
     </>
   );
 };
