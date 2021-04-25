@@ -75,7 +75,7 @@ const WelcomeScreen = ({ token, setToken }) => {
               Join an existing list
             </button>
           </form>
-          <p data-testid="errorMsg" className="red-text">
+          <p data-testid="errorMsg" className="error-message">
             {errorMsg}
           </p>
         </>
