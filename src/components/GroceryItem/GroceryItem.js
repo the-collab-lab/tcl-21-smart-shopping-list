@@ -8,11 +8,8 @@ const GroceryItem = ({ item }) => {
   const oneday = 60 * 60 * 24 * 1000;
 
   useEffect(() => {
-    if (item.purchaseDate < Date.now() - oneday) {
-      return false;
-    } else {
+    if (item.purchaseDate > Date.now() - oneday) {
       setChecked(true);
-      return true;
     }
   }, []);
 
@@ -34,6 +31,7 @@ const GroceryItem = ({ item }) => {
     return groceryItem
       .update({
         purchaseDate: null,
+        // purchaseDate: item.purchaseDate,
       })
       .then(() => {
         setChecked(false);
