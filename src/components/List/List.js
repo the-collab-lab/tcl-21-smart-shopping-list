@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { firestore } from '../../lib/firebase.js';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import GroceryItem from '../GroceryItem/GroceryItem';
@@ -11,10 +11,21 @@ const List = ({ token, setToken }) => {
   const query = groceryItemsRef.where('token', '==', token);
   const [groceryItems, loading, error] = useCollectionData(query, {
     idField: 'id',
-  }); // added constants that detect the query's state so that page doesn't render when the query is still loading
+  });
   const history = useHistory();
   const [filterTerm, setFilterTerm] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+
+  useEffect(() => {
+    if (groceryListExists()) {
+      setFilteredData(
+        groceryItems.filter(
+          (data) =>
+            data.name.toLowerCase().search(filterTerm.toLowerCase()) !== -1,
+        ),
+      );
+    }
+  }, [filterTerm]);
 
   const clearToken = () => {
     window.localStorage.removeItem('token');
@@ -22,14 +33,12 @@ const List = ({ token, setToken }) => {
     history.push('/');
   };
 
+  const groceryListExists = () => {
+    return !loading && !error && groceryItems && groceryItems.length;
+  };
+
   const searchHandler = (e) => {
     setFilterTerm(e.target.value);
-    setFilteredData(
-      groceryItems.filter((data) => {
-        return data.name.toLowerCase().search(filterTerm.toLowerCase()) != -1;
-      }),
-    );
-    console.log('Filtered Data: ', filteredData);
   };
 
   return (
@@ -62,9 +71,8 @@ const List = ({ token, setToken }) => {
             role="button"
             tabIndex={0}
           />
-
           <div className="grocery-list">
-            {!loading && !error && groceryItems && groceryItems.length ? (
+            {groceryListExists() ? (
               <ul>
                 {filterTerm
                   ? filteredData.map((item) => (
