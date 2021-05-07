@@ -18,3 +18,7 @@
   display: block;
   margin-bottom: 0.5rem;
 }
+
+.list hr {
+  width: 50%;
+}

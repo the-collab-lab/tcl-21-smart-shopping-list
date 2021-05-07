@@ -24,8 +24,8 @@ const List = ({ token, setToken }) => {
 
   const searchHandler = (e) => {
     setFilterTerm(e.target.value);
-    const filteredItems = groceryItems.filter((data) => {
-      return data.name.toLowerCase().search(e.target.value.toLowerCase()) != -1;
+    const filteredItems = groceryItems.filter((item) => {
+      return item.name.toLowerCase().includes(e.target.value.toLowerCase());
     });
     setFilteredData(filteredItems);
   };
@@ -47,7 +47,7 @@ const List = ({ token, setToken }) => {
           <p>
             Share your token: <strong>{token}</strong>
           </p>
-          <hr style={{ width: '50%' }} />
+          <hr />
           <label htmlFor="filtered-item">Filter Items</label>
           <input
             type="text"
