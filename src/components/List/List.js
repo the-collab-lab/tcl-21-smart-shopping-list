@@ -11,7 +11,7 @@ const List = ({ token, setToken }) => {
   const query = groceryItemsRef.where('token', '==', token);
   const [groceryItems, loading, error] = useCollectionData(query, {
     idField: 'id',
-  }); // added constants that detect the query's state so that page doesn't render when the query is still loading
+  });
   const history = useHistory();
   const [filterTerm, setFilterTerm] = useState('');
   const [filteredData, setFilteredData] = useState([]);
@@ -24,12 +24,14 @@ const List = ({ token, setToken }) => {
 
   const searchHandler = (e) => {
     setFilterTerm(e.target.value);
-    setFilteredData(
-      groceryItems.filter((data) => {
-        return data.name.toLowerCase().search(filterTerm.toLowerCase()) != -1;
-      }),
-    );
-    console.log('Filtered Data: ', filteredData);
+    const filteredItems = groceryItems.filter((data) => {
+      return data.name.toLowerCase().search(e.target.value.toLowerCase()) != -1;
+    });
+    setFilteredData(filteredItems);
+  };
+
+  const isGroceryList = () => {
+    return !loading && !error && groceryItems && groceryItems.length;
   };
 
   return (
@@ -64,7 +66,7 @@ const List = ({ token, setToken }) => {
           />
 
           <div className="grocery-list">
-            {!loading && !error && groceryItems && groceryItems.length ? (
+            {isGroceryList() ? (
               <ul>
                 {filterTerm
                   ? filteredData.map((item) => (
