@@ -5,9 +5,21 @@ import NavBar from '../NavBar/NavBar';
 const AddItem = (props) => {
   const [groceryItem, setGroceryItem] = useState('');
   const [howSoon, setHowSoon] = useState(null);
+  const [purchDate, setPurchDate] = useState(null);
+
+  const oneday = 60 * 60 * 24 * 1000;
+
+  const workOutNextPurchDate = (howSoon) => {
+    const howManyDaysInSeconds = howSoon * oneday;
+    return purchDate || Date.now() + howManyDaysInSeconds;
+  };
 
   const itemInputChange = (e) => {
     setGroceryItem(e.target.value);
+  };
+
+  const purchDateChange = (e) => {
+    setPurchDate(e.target.value);
   };
 
   const radioInputChange = (e) => {
@@ -26,7 +38,7 @@ const AddItem = (props) => {
     const existingItem = await duplicateItem(groceryItem);
     if (existingItem) {
       alert('The Item already exists!');
-
+      setPurchDate(null);
       setGroceryItem('');
       setHowSoon(null);
       return;
@@ -37,10 +49,11 @@ const AddItem = (props) => {
       name: groceryItem,
       howSoon: howSoon,
       createdAt: Date.now(),
-      purchaseDate: null,
+      purchaseDate: Date.parse(purchDate),
+      nextPurchase: workOutNextPurchDate(howSoon),
       token: props.token,
     });
-
+    setPurchDate(null);
     setGroceryItem('');
     setHowSoon(null);
   };
@@ -84,6 +97,16 @@ const AddItem = (props) => {
           />
         </label>
         <br />
+        <label htmlFor="addItem">
+          Last Purchase Date:
+          <input
+            id="purchaseDate"
+            name="purchaseDate"
+            type="datetime-local"
+            value={purchDate}
+            onChange={purchDateChange}
+          />
+        </label>
         <br />
         <fieldset>
           <p>How soon will you buy this again?</p>
