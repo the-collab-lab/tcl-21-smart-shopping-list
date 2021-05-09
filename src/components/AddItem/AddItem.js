@@ -6,14 +6,11 @@ const AddItem = (props) => {
   const [groceryItem, setGroceryItem] = useState('');
   const [howSoon, setHowSoon] = useState(null);
   const [purchDate, setPurchDate] = useState(null);
-
-  const oneday = 60 * 60 * 24 * 1000;
-
-  /*This should be imported*/
+  const ONE_DAY_IN_MILLISECONDS = 60 * 60 * 24 * 1000;
 
   const calculateNextPurchaseDate = (howSoon) => {
-    const howManyDaysInSeconds = howSoon * oneday;
-    return purchDate || Date.now() + howManyDaysInSeconds;
+    const howManyDaysInSeconds = howSoon * ONE_DAY_IN_MILLISECONDS;
+    return Date.now() + howManyDaysInSeconds;
   };
 
   const itemInputChange = (e) => {
@@ -73,8 +70,6 @@ const AddItem = (props) => {
           }
         });
       })
-
-      // alert that catches an error
       .catch((e) => {
         alert('Sorry, something went wrong!');
       });
@@ -97,16 +92,6 @@ const AddItem = (props) => {
           />
         </label>
         <br />
-        {/* <label htmlFor="addItem">
-          Last Purchase Date:
-          <input
-            id="purchaseDate"
-            name="purchaseDate"
-            type="datetime-local"
-            value={purchDate}
-            onChange={purchDateChange}
-          />
-        </label> */}
         <br />
         <fieldset>
           <p>How soon will you buy this again?</p>

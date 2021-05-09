@@ -6,15 +6,8 @@ import calculateEstimate from '../../lib/estimates';
 const GroceryItem = ({ item }) => {
   const groceryItem = firestore.collection('groceryItems').doc(item.id);
   const [isChecked, setChecked] = useState(false);
-
   const currentDate = Date.now();
   const ONE_DAY_IN_MILLISECONDS = 60 * 60 * 24 * 1000;
-  const fromMilliSecToDays = (time) => Math.ceil(time / 86400000);
-
-  const howManyDays = () => {
-    const milliSecsBetween = item.nextPurchase - Date.now();
-    return fromMilliSecToDays(milliSecsBetween);
-  };
 
   useEffect(() => {
     if (item.purchaseDate > Date.now() - ONE_DAY_IN_MILLISECONDS) {
@@ -55,15 +48,7 @@ const GroceryItem = ({ item }) => {
   };
 
   const resetDate = () => {
-    return groceryItem
-      .update({
-        // purchaseDate: null,
-        // purchaseDate: item.purchaseDate,
-      })
-      .then(() => {
-        setChecked(false);
-        return false;
-      });
+    setChecked(false);
   };
 
   return (
