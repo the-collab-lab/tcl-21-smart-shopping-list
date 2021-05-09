@@ -9,17 +9,15 @@ const AddItem = (props) => {
 
   const oneday = 60 * 60 * 24 * 1000;
 
-  const workOutNextPurchDate = (howSoon) => {
+  /*This should be imported*/
+
+  const calculateNextPurchaseDate = (howSoon) => {
     const howManyDaysInSeconds = howSoon * oneday;
     return purchDate || Date.now() + howManyDaysInSeconds;
   };
 
   const itemInputChange = (e) => {
     setGroceryItem(e.target.value);
-  };
-
-  const purchDateChange = (e) => {
-    setPurchDate(e.target.value);
   };
 
   const radioInputChange = (e) => {
@@ -49,8 +47,10 @@ const AddItem = (props) => {
       name: groceryItem,
       howSoon: howSoon,
       createdAt: Date.now(),
-      purchaseDate: Date.parse(purchDate),
-      nextPurchase: workOutNextPurchDate(howSoon),
+      numberOfPurchases: 0,
+      purchaseDate: null,
+      previousPurchaseDate: null,
+      nextPurchaseDate: calculateNextPurchaseDate(howSoon),
       token: props.token,
     });
     setPurchDate(null);
@@ -97,7 +97,7 @@ const AddItem = (props) => {
           />
         </label>
         <br />
-        <label htmlFor="addItem">
+        {/* <label htmlFor="addItem">
           Last Purchase Date:
           <input
             id="purchaseDate"
@@ -106,7 +106,7 @@ const AddItem = (props) => {
             value={purchDate}
             onChange={purchDateChange}
           />
-        </label>
+        </label> */}
         <br />
         <fieldset>
           <p>How soon will you buy this again?</p>

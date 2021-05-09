@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../../lib/firebase.js';
+import { differenceInDays, addDays } from 'date-fns';
 import calculateEstimate from '../../lib/estimates';
 
 const GroceryItem = ({ item }) => {
   const groceryItem = firestore.collection('groceryItems').doc(item.id);
   const [isChecked, setChecked] = useState(false);
 
-  const oneday = 60 * 60 * 24 * 1000;
-
+  const currentDate = Date.now();
+  const ONE_DAY_IN_MILLISECONDS = 60 * 60 * 24 * 1000;
   const fromMilliSecToDays = (time) => Math.ceil(time / 86400000);
-
-  const workOutNextPurchDate = (howSoon) => {
-    const howManyDaysInSeconds = howSoon * oneday;
-    return Date.now() + howManyDaysInSeconds;
-  };
 
   const howManyDays = () => {
     const milliSecsBetween = item.nextPurchase - Date.now();
@@ -21,16 +17,33 @@ const GroceryItem = ({ item }) => {
   };
 
   useEffect(() => {
-    if (item.purchaseDate > Date.now() - oneday) {
+    if (item.purchaseDate > Date.now() - ONE_DAY_IN_MILLISECONDS) {
       setChecked(true);
     }
   }, []);
 
+  const latestInterval = () => {
+    if (item.purchaseDate && item.previousPurchaseDate) {
+      return differenceInDays(item.purchaseDate, item.previousPurchaseDate);
+    } else {
+      return item.howSoon;
+    }
+  };
+
   const setNewDate = () => {
+    const daysUntilNextPurchase = calculateEstimate(
+      item.howSoon,
+      latestInterval(),
+      item.numberOfPurchases,
+    );
+
     return groceryItem
       .update({
-        purchaseDate: Date.now(),
-        nextPurchase: workOutNextPurchDate(item.howSoon),
+        previousPurchaseDate: item.purchaseDate ? item.purchaseDate : null,
+        purchaseDate: currentDate,
+        howSoon: daysUntilNextPurchase,
+        numberOfPurchases: item.numberOfPurchases + 1,
+        nextPurchaseDate: addDays(currentDate, daysUntilNextPurchase),
       })
       .then(() => {
         console.log('Document successfully updated!', item.purchaseDate);
@@ -41,12 +54,10 @@ const GroceryItem = ({ item }) => {
       });
   };
 
-  console.log(item.purchaseDate);
-
   const resetDate = () => {
     return groceryItem
       .update({
-        purchaseDate: null,
+        // purchaseDate: null,
         // purchaseDate: item.purchaseDate,
       })
       .then(() => {
@@ -63,7 +74,7 @@ const GroceryItem = ({ item }) => {
           onChange={() => (isChecked ? resetDate() : setNewDate())}
           checked={isChecked}
         />
-        {item.name} - Repurchase in {howManyDays()} days
+        {item.name} - Repurchase in {item.howSoon} days
       </p>
     </>
   );

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "date-fns": "^2.21.3",
     "dotenv": "^8.2.0",
     "firebase": "^8.3.2",
     "react": "^17.0.1",
