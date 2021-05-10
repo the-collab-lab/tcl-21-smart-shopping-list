@@ -7,8 +7,6 @@ import './GroceryItem.css';
 const GroceryItem = ({ item }) => {
   const groceryItem = firestore.collection('groceryItems').doc(item.id);
   const [isChecked, setChecked] = useState(false);
-  const [ariaLabel, setAriaLabel] = useState('');
-  const [background, setBackground] = useState('');
   const currentDate = Date.now();
   const ONE_DAY_IN_MILLISECONDS = 60 * 60 * 24 * 1000;
 
@@ -16,24 +14,7 @@ const GroceryItem = ({ item }) => {
     if (item.purchaseDate > Date.now() - ONE_DAY_IN_MILLISECONDS) {
       setChecked(true);
     }
-    if (
-      currentDate - item.purchaseDate >=
-        2 * (item.nextPurchaseDate - item.purchaseDate) ||
-      item.numberOfPurchases === 0
-    ) {
-      setAriaLabel('Inactive');
-      setBackground('background-grey');
-    } else if (item.howSoon < 7) {
-      setAriaLabel('Need to buy soon');
-      setBackground('background-red');
-    } else if (item.howSoon >= 7 && item.howSoon <= 30) {
-      setAriaLabel('Need to but kind of soon');
-      setBackground('background-yellow');
-    } else if (item.howSoon > 30) {
-      setAriaLabel('Do not need to buy soon');
-      setBackground('background-green');
-    }
-  }, [isChecked]);
+  }, []);
 
   const latestInterval = () => {
     if (item.purchaseDate && item.previousPurchaseDate) {
@@ -72,9 +53,41 @@ const GroceryItem = ({ item }) => {
     setChecked(false);
   };
 
+  const getAriaLabel = () => {
+    if (
+      currentDate - item.purchaseDate >=
+        2 * (item.nextPurchaseDate - item.purchaseDate) ||
+      item.numberOfPurchases === 0
+    ) {
+      return 'Inactive';
+    } else if (item.howSoon < 7) {
+      return 'Need to buy soon';
+    } else if (item.howSoon >= 7 && item.howSoon <= 30) {
+      return 'Need to buy kind of soon';
+    } else if (item.howSoon > 30) {
+      return 'Do not need to buy soon';
+    }
+  };
+
+  const getBackground = () => {
+    if (
+      currentDate - item.purchaseDate >=
+        2 * (item.nextPurchaseDate - item.purchaseDate) ||
+      item.numberOfPurchases === 0
+    ) {
+      return 'background-grey';
+    } else if (item.howSoon < 7) {
+      return 'background-red';
+    } else if (item.howSoon >= 7 && item.howSoon <= 30) {
+      return 'background-yellow';
+    } else if (item.howSoon > 30) {
+      return 'background-green';
+    }
+  };
+
   return (
     <>
-      <p aria-label={ariaLabel} className={background}>
+      <p aria-label={getAriaLabel()} className={getBackground()}>
         <input
           type="checkbox"
           onChange={() => (isChecked ? handleUncheckBox() : setNewDate())}
