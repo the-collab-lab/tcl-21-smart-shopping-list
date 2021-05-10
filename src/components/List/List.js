@@ -34,6 +34,16 @@ const List = ({ token, setToken }) => {
     return !loading && !error && groceryItems && groceryItems.length;
   };
 
+  const sortByHowSoonAndName = (list) => {
+    list.sort((a, b) => {
+      if (a.howSoon === b.howSoon) {
+        return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+      }
+      return a.howSoon - b.howSoon;
+    });
+    return list;
+  };
+
   return (
     <>
       {!token ? (
@@ -64,15 +74,14 @@ const List = ({ token, setToken }) => {
             role="button"
             tabIndex={0}
           />
-
           <div className="grocery-list">
             {isGroceryList() ? (
               <ul>
                 {filterTerm
-                  ? filteredData.map((item) => (
+                  ? sortByHowSoonAndName(filteredData).map((item) => (
                       <GroceryItem key={item.id} item={item} />
                     ))
-                  : groceryItems.map((item) => (
+                  : sortByHowSoonAndName(groceryItems).map((item) => (
                       <GroceryItem key={item.id} item={item} />
                     ))}
               </ul>

@@ -16,7 +16,6 @@ const GroceryItem = ({ item }) => {
     if (item.purchaseDate > Date.now() - ONE_DAY_IN_MILLISECONDS) {
       setChecked(true);
     }
-
     if (
       currentDate - item.purchaseDate >=
         2 * (item.nextPurchaseDate - item.purchaseDate) ||
@@ -28,13 +27,13 @@ const GroceryItem = ({ item }) => {
       setAriaLabel('Need to buy soon');
       setBackground('background-red');
     } else if (item.howSoon >= 7 && item.howSoon <= 30) {
-      setAriaLabel('Kind of soon');
+      setAriaLabel('Need to but kind of soon');
       setBackground('background-yellow');
     } else if (item.howSoon > 30) {
-      setAriaLabel('Need to buy not soon');
+      setAriaLabel('Do not need to buy soon');
       setBackground('background-green');
     }
-  }, []);
+  }, [isChecked]);
 
   const latestInterval = () => {
     if (item.purchaseDate && item.previousPurchaseDate) {
@@ -68,33 +67,17 @@ const GroceryItem = ({ item }) => {
       });
   };
 
-  const resetDate = () => {
+  // Should we delete the option to uncheck? Otherwise, we can't really reset the previousPurchaseDate in Firestore.
+  const handleUncheckBox = () => {
     setChecked(false);
   };
-
-  // const getStyles = () => {
-  //   if (item.howSoon < 7) {
-  //       setAriaLabel('Need to buy soon')
-  //       setBackground('background-red')
-  //   } else if (item.howSoon >=7 && item.howSoon <=30) {
-  //       setAriaLabel('Kind of soon')
-  //       setBackground('background-yellow')
-  //   } else if (item.howSoon > 30) {
-  //       setAriaLabel('Need to buy not soon')
-  //       setBackground('background-green')
-  //   } else if ((currentDate - item.purchaseDate) >= 2 * (item.nextPurchaseDate.getTime() - item.purchaseDate)
-  //     || item.numberOfPurchases === 0) {
-  //       setAriaLabel('Inactive')
-  //       setBackground('background-grey')
-  //     }
-  // }
 
   return (
     <>
       <p aria-label={ariaLabel} className={background}>
         <input
           type="checkbox"
-          onChange={() => (isChecked ? resetDate() : setNewDate())}
+          onChange={() => (isChecked ? handleUncheckBox() : setNewDate())}
           checked={isChecked}
         />
         {item.name} - Repurchase in {item.howSoon} days
