@@ -5,6 +5,13 @@ import NavBar from '../NavBar/NavBar';
 const AddItem = (props) => {
   const [groceryItem, setGroceryItem] = useState('');
   const [howSoon, setHowSoon] = useState(null);
+  const [purchDate, setPurchDate] = useState(null);
+  const ONE_DAY_IN_MILLISECONDS = 60 * 60 * 24 * 1000;
+
+  const calculateNextPurchaseDate = (howSoon) => {
+    const howManyDaysInSeconds = howSoon * ONE_DAY_IN_MILLISECONDS;
+    return Date.now() + howManyDaysInSeconds;
+  };
 
   const itemInputChange = (e) => {
     setGroceryItem(e.target.value);
@@ -26,7 +33,7 @@ const AddItem = (props) => {
     const existingItem = await duplicateItem(groceryItem);
     if (existingItem) {
       alert('The Item already exists!');
-
+      setPurchDate(null);
       setGroceryItem('');
       setHowSoon(null);
       return;
@@ -37,10 +44,13 @@ const AddItem = (props) => {
       name: groceryItem,
       howSoon: howSoon,
       createdAt: Date.now(),
+      numberOfPurchases: 0,
       purchaseDate: null,
+      previousPurchaseDate: null,
+      nextPurchaseDate: calculateNextPurchaseDate(howSoon),
       token: props.token,
     });
-
+    setPurchDate(null);
     setGroceryItem('');
     setHowSoon(null);
   };
@@ -60,8 +70,6 @@ const AddItem = (props) => {
           }
         });
       })
-
-      // alert that catches an error
       .catch((e) => {
         alert('Sorry, something went wrong!');
       });
