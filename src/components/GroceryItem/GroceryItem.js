@@ -105,21 +105,19 @@ const GroceryItem = ({ item }) => {
           checked={isChecked}
         />
         {item.name} - Repurchase in {item.howSoon} days
-        <div className="container">
-          <button
-            className="delete button"
-            onClick={() => {
-              const confirmation = window.confirm(
-                'Did you mean to delete this item?',
-              );
-              if (confirmation) {
-                deleteItem(item.id);
-              }
-            }}
-          >
-            Delete
-          </button>
-        </div>
+        <button
+          className="delete-button"
+          onClick={() => {
+            const confirmation = window.confirm(
+              'Did you mean to delete this item?',
+            );
+            if (confirmation) {
+              deleteItem(item.id);
+            }
+          }}
+        >
+          Delete
+        </button>
       </p>
     </>
   );

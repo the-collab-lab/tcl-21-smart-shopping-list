@@ -13,3 +13,23 @@
 .background-grey {
   background-color: grey;
 }
+
+.delete-button {
+  border-radius: 0.25rem;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+}
+
+.confirm-bg {
+  position: fixed;
+  display: none;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #202020;
+  opacity: 0.55;
+  overflow: hidden;
+  z-index: 2;
+}
