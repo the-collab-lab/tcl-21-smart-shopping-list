@@ -64,18 +64,18 @@ const GroceryItem = ({ item }) => {
     );
   };
 
-  const getAriaLabel = (itemName) => {
+  const getAriaLabel = () => {
     if (isInactive()) {
-      return 'Inactive: Item has never been purchased or item is two times past its estimated repurchase time.';
+      return `Inactive: ${item.name} has never been purchased or is two times past its estimated repurchase date.`;
     } else if (item.howSoon < LOWEST_PERIOD) {
-      return `Need to buy ${itemName} soon`;
+      return `Need to buy ${item.name} soon`;
     } else if (
       item.howSoon >= LOWEST_PERIOD &&
       item.howSoon <= HIGHEST_PERIOD
     ) {
-      return `Need to buy ${itemName} kind of soon`;
+      return `Need to buy ${item.name} kind of soon`;
     } else if (item.howSoon > HIGHEST_PERIOD) {
-      return `Do not need to buy ${itemName} soon`;
+      return `Do not need to buy ${item.name} soon`;
     }
   };
 
@@ -101,7 +101,7 @@ const GroceryItem = ({ item }) => {
           type="checkbox"
           onChange={() => (isChecked ? handleUncheckBox() : setNewDate())}
           checked={isChecked}
-          aria-label={getAriaLabel(item.name)}
+          aria-label={getAriaLabel()}
         />
         {item.name} - Repurchase in {item.howSoon} days
       </p>
