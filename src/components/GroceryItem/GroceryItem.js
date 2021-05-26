@@ -53,6 +53,17 @@ const GroceryItem = ({ item }) => {
     setChecked(false);
   };
 
+  const deleteItem = () => {
+    groceryItem
+      .delete(item.id)
+      .then(() => {
+        console.log('Item has been removed', item.id);
+      })
+      .catch((error) => {
+        console.error('Could not delete this item', error, item.id);
+      });
+  };
+
   const LOWEST_PERIOD = 7;
   const HIGHEST_PERIOD = 21;
 
@@ -62,6 +73,13 @@ const GroceryItem = ({ item }) => {
         2 * (item.nextPurchaseDate - item.purchaseDate) ||
       item.numberOfPurchases === 0
     );
+  };
+
+  const confirmDelete = () => {
+    const confirmation = window.confirm('Did you mean to delete this item?');
+    if (confirmation) {
+      deleteItem(item.id);
+    }
   };
 
   const getAriaLabel = () => {
@@ -104,6 +122,9 @@ const GroceryItem = ({ item }) => {
           aria-label={getAriaLabel()}
         />
         {item.name} - Repurchase in {item.howSoon} days
+        <button className="delete-button" onClick={confirmDelete}>
+          Delete
+        </button>
       </p>
     </>
   );

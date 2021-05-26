@@ -13,3 +13,10 @@
 .background-grey {
   background-color: grey;
 }
+
+.delete-button {
+  border-radius: 0.25rem;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+}
