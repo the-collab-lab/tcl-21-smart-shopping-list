@@ -75,6 +75,13 @@ const GroceryItem = ({ item }) => {
     );
   };
 
+  const confirmDelete = () => {
+    const confirmation = window.confirm('Did you mean to delete this item?');
+    if (confirmation) {
+      deleteItem(item.id);
+    }
+  };
+
   const getAriaLabel = () => {
     if (isInactive()) {
       return `Inactive: ${item.name} has never been purchased or is two times past its estimated repurchase date.`;
@@ -115,17 +122,7 @@ const GroceryItem = ({ item }) => {
           aria-label={getAriaLabel()}
         />
         {item.name} - Repurchase in {item.howSoon} days
-        <button
-          className="delete-button"
-          onClick={() => {
-            const confirmation = window.confirm(
-              'Did you mean to delete this item?',
-            );
-            if (confirmation) {
-              deleteItem(item.id);
-            }
-          }}
-        >
+        <button className="delete-button" onClick={confirmDelete}>
           Delete
         </button>
       </p>
