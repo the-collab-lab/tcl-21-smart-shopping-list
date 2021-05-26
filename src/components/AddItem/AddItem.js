@@ -1,8 +1,25 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { firestore } from '../../lib/firebase.js';
+import { makeStyles, useTheme } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import NavBar from '../NavBar/NavBar';
 
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+  },
+}));
+
 const AddItem = (props) => {
+  const history = useHistory();
+  const classes = useStyles();
+  const theme = useTheme();
+  const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
   const [groceryItem, setGroceryItem] = useState('');
   const [howSoon, setHowSoon] = useState(null);
   const [purchDate, setPurchDate] = useState(null);
@@ -77,8 +94,17 @@ const AddItem = (props) => {
     return existingItem;
   };
 
+  const clearToken = () => {
+    window.localStorage.removeItem('token');
+    props.setToken('');
+    history.push('/');
+  };
+
   return (
-    <section className="add-item">
+    <Container
+      component="section"
+      className={matchesSM ? classes.mobileContainer : classes.container}
+    >
       <h1>Add Item</h1>
       <form onSubmit={handleSubmitClick}>
         <label htmlFor="addItem">
@@ -130,8 +156,12 @@ const AddItem = (props) => {
         <br />
         <input type="submit" value="Add to Shopping List" />
       </form>
-      <NavBar />
-    </section>
+      <NavBar
+        token={props.token}
+        setToken={props.setToken}
+        clearToken={clearToken}
+      />
+    </Container>
   );
 };
 
