@@ -64,45 +64,55 @@ const GroceryItem = ({ item }) => {
       });
   };
 
-  const getAriaLabel = () => {
-    if (
+  const LOWEST_PERIOD = 7;
+  const HIGHEST_PERIOD = 21;
+
+  const isInactive = () => {
+    return (
       currentDate - item.purchaseDate >=
         2 * (item.nextPurchaseDate - item.purchaseDate) ||
       item.numberOfPurchases === 0
+    );
+  };
+
+  const getAriaLabel = () => {
+    if (isInactive()) {
+      return `Inactive: ${item.name} has never been purchased or is two times past its estimated repurchase date.`;
+    } else if (item.howSoon < LOWEST_PERIOD) {
+      return `Need to buy ${item.name} soon`;
+    } else if (
+      item.howSoon >= LOWEST_PERIOD &&
+      item.howSoon <= HIGHEST_PERIOD
     ) {
-      return 'Inactive';
-    } else if (item.howSoon < 7) {
-      return 'Need to buy soon';
-    } else if (item.howSoon >= 7 && item.howSoon <= 30) {
-      return 'Need to buy kind of soon';
-    } else if (item.howSoon > 30) {
-      return 'Do not need to buy soon';
+      return `Need to buy ${item.name} kind of soon`;
+    } else if (item.howSoon > HIGHEST_PERIOD) {
+      return `Do not need to buy ${item.name} soon`;
     }
   };
 
   const getBackground = () => {
-    if (
-      currentDate - item.purchaseDate >=
-        2 * (item.nextPurchaseDate - item.purchaseDate) ||
-      item.numberOfPurchases === 0
-    ) {
+    if (isInactive()) {
       return 'background-grey';
-    } else if (item.howSoon < 7) {
+    } else if (item.howSoon < LOWEST_PERIOD) {
       return 'background-red';
-    } else if (item.howSoon >= 7 && item.howSoon <= 30) {
+    } else if (
+      item.howSoon >= LOWEST_PERIOD &&
+      item.howSoon <= HIGHEST_PERIOD
+    ) {
       return 'background-yellow';
-    } else if (item.howSoon > 30) {
+    } else if (item.howSoon > HIGHEST_PERIOD) {
       return 'background-green';
     }
   };
 
   return (
     <>
-      <p aria-label={getAriaLabel()} className={getBackground()}>
+      <p className={getBackground()}>
         <input
           type="checkbox"
           onChange={() => (isChecked ? handleUncheckBox() : setNewDate())}
           checked={isChecked}
+          aria-label={getAriaLabel()}
         />
         {item.name} - Repurchase in {item.howSoon} days
         <button
