@@ -4,7 +4,19 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import GroceryItem from '../GroceryItem/GroceryItem';
 import NavBar from '../NavBar/NavBar';
 import { useHistory } from 'react-router-dom';
+import { makeStyles, useTheme } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import './List.css';
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+  },
+}));
 
 const List = ({ token, setToken }) => {
   const groceryItemsRef = firestore.collection('groceryItems');
@@ -13,6 +25,9 @@ const List = ({ token, setToken }) => {
     idField: 'id',
   });
   const history = useHistory();
+  const classes = useStyles();
+  const theme = useTheme();
+  const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
   const [filterTerm, setFilterTerm] = useState('');
   const [filteredData, setFilteredData] = useState([]);
 
@@ -49,15 +64,11 @@ const List = ({ token, setToken }) => {
       {!token ? (
         history.push('/')
       ) : (
-        <section className="list">
+        <Container
+          component="section"
+          className={matchesSM ? classes.mobileContainer : classes.container}
+        >
           <h1>Current List</h1>
-          <button data-testid="clearTokenButton" onClick={clearToken}>
-            Return to welcome screen
-          </button>
-          <p>
-            Share your token: <strong>{token}</strong>
-          </p>
-          <hr />
           <label htmlFor="filtered-item">Filter Items</label>
           <input
             type="text"
@@ -94,8 +105,8 @@ const List = ({ token, setToken }) => {
               </>
             )}
           </div>
-          <NavBar />
-        </section>
+          <NavBar token={token} setToken={setToken} clearToken={clearToken} />
+        </Container>
       )}
     </>
   );
