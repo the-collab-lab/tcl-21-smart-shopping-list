@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import Logo from '../Logo/Logo';
 
 const useStyles = makeStyles((theme) => ({
   appBarContent: {
@@ -37,7 +38,8 @@ const Header = () => {
           align="center"
           className={classes.appBarText}
         >
-          Smart Shopping List
+          <Logo />
+          Smart Cart
         </Typography>
       </Toolbar>
     </AppBar>

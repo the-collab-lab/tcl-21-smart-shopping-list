@@ -29,6 +29,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <Header />
+
         <Container variant="main" className={`main-div ${classes.container}`}>
           <Switch>
             <Route exact path="/">
