@@ -26,6 +26,19 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
+  text: {
+    justifyContent: 'center',
+    fontFamily: 'Mulish',
+  },
+  button: {
+    justifyContent: 'center',
+    fontFamily: 'Mulish',
+    backgroundColor:
+      'linear-gradient( 0deg, rgba(84,101,255,1) 0%, rgba(203,243,240,1), 100%)',
+    '&:hover': {
+      backgroundColor: '#5465ff',
+    },
+  },
 });
 
 const WelcomeScreen = ({ token, setToken }) => {
@@ -84,18 +97,30 @@ const WelcomeScreen = ({ token, setToken }) => {
         history.push('/list')
       ) : (
         <>
-          <h1>Welcome to your Smart Shopping list!</h1>
+          <h1 className={classes.text}>Welcome to your Smart Shopping list!</h1>
+
           <Grid container spacing={4}>
             <Grid item xs={6}>
               <Card className={classes.root} variant="outlined">
                 <CardContent>
-                  <Typography variant="h4" style={{ backgroundColor: 'grey' }}>
+                  <Typography
+                    variant="h4"
+                    className={classes.text}
+                    style={{ backgroundColor: '#5465ff', borderRadius: '10px' }}
+                  >
                     Creating A New List
                   </Typography>
-                  <Typography variant="h6">
-                    <p>
+                  <Typography
+                    className={classes.text}
+                    variant="h6"
+                    style={{
+                      padding: '1rem',
+                      display: 'flex',
+                    }}
+                  >
+                    <p className={classes.text}>
                       <ul>
-                        <li>
+                        <li style={{ padding: '1rem' }}>
                           Clicking the "+" button will take you to an empty
                           shopping list
                         </li>
@@ -129,43 +154,71 @@ const WelcomeScreen = ({ token, setToken }) => {
             <Grid item xs={6}>
               <Card className={classes.root} variant="outlined">
                 <CardContent>
-                  <CardActionArea>
-                    <Typography
-                      variant="h4"
-                      style={{ backgroundColor: 'grey' }}
+                  <Typography
+                    variant="h4"
+                    className={classes.text}
+                    style={{
+                      backgroundColor: '#5465ff',
+                      borderRadius: '10px',
+                      padding: '0rem',
+                    }}
+                  >
+                    Join an Existing List
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    className={classes.text}
+                    style={{
+                      padding: '1rem',
+                      display: 'flex',
+                    }}
+                  >
+                    <p>
+                      <ul>
+                        <li style={{ padding: '1rem' }}>
+                          Use the three word token generated at list creation to
+                          return to an existing shopping list
+                        </li>
+                        <li>
+                          You will find your most recently created token stored
+                          in the sidebar of your shopping list view
+                        </li>
+                      </ul>
+                    </p>
+                  </Typography>
+
+                  <form onSubmit={handleExistingToken}>
+                    <label
+                      className={classes.text}
+                      style={{ fontSize: '20px' }}
+                      htmlFor="oldToken"
                     >
-                      Join an Existing List
-                    </Typography>
-                    <Typography variant="h6">
-                      <p>
-                        <ul>
-                          <li>
-                            Use the three word token generated at list creation
-                            to return to an existing shopping list
-                          </li>
-                        </ul>
-                      </p>
-                    </Typography>
-
-                    <form onSubmit={handleExistingToken}>
-                      <label htmlFor="oldToken">Share Token:</label>
-                      <input
-                        type="text"
-                        id="oldToken"
-                        value={oldToken}
-                        onChange={(e) => setOldToken(e.target.value)}
-                      />
-
-                      <CardActions>
+                      Share Your Token Here:
+                    </label>
+                    <input
+                      type="text"
+                      id="oldToken"
+                      value={oldToken}
+                      onChange={(e) => setOldToken(e.target.value)}
+                      style={{
+                        marginLeft: '6px',
+                        marginBottom: '80px',
+                        height: '20px',
+                        width: '200px',
+                      }}
+                    />
+                    <CardActionArea>
+                      <CardActions className={classes.button}>
                         <Button
+                          className={classes.button}
                           data-testid="joinListButton"
                           disabled={!oldToken}
                         >
                           Go To List
                         </Button>
                       </CardActions>
-                    </form>
-                  </CardActionArea>
+                    </CardActionArea>
+                  </form>
                 </CardContent>
               </Card>
             </Grid>

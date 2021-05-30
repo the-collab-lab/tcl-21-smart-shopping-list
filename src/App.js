@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ThemeProvider } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
+import Particles from './components/Particles/Particles';
 
 import './App.css';
 import FirestoreTest from './components/FirestoreTest';
@@ -28,8 +29,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
+        <Particles />
         <Header />
-
         <Container variant="main" className={`main-div ${classes.container}`}>
           <Switch>
             <Route exact path="/">
