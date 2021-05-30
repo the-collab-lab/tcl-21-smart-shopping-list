@@ -12,6 +12,7 @@ import {
   Grid,
   Typography,
   Icon,
+  TextField,
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -187,38 +188,37 @@ const WelcomeScreen = ({ token, setToken }) => {
                     </p>
                   </Typography>
 
-                  <form onSubmit={handleExistingToken}>
-                    <label
-                      className={classes.text}
-                      style={{ fontSize: '20px' }}
-                      htmlFor="oldToken"
-                    >
-                      Share Your Token Here:
-                    </label>
-                    <input
-                      type="text"
-                      id="oldToken"
-                      value={oldToken}
-                      onChange={(e) => setOldToken(e.target.value)}
-                      style={{
-                        marginLeft: '6px',
-                        marginBottom: '80px',
-                        height: '20px',
-                        width: '200px',
-                      }}
-                    />
-                    <CardActionArea>
-                      <CardActions className={classes.button}>
-                        <Button
-                          className={classes.button}
-                          data-testid="joinListButton"
-                          disabled={!oldToken}
-                        >
-                          Go To List
-                        </Button>
-                      </CardActions>
-                    </CardActionArea>
-                  </form>
+                  <label
+                    className={classes.text}
+                    style={{ fontSize: '20px' }}
+                    htmlFor="oldToken"
+                  >
+                    Share Your Token Here:
+                  </label>
+                  <TextField
+                    type="text"
+                    id="oldToken"
+                    value={oldToken}
+                    onChange={(e) => setOldToken(e.target.value)}
+                    style={{
+                      marginLeft: '6px',
+                      marginBottom: '80px',
+                      height: '20px',
+                      width: '200px',
+                    }}
+                  />
+                  <CardActionArea>
+                    <CardActions className={classes.button}>
+                      <Button
+                        className={classes.button}
+                        data-testid="joinListButton"
+                        disabled={!oldToken}
+                        onClick={(e) => handleExistingToken(e)}
+                      >
+                        Go To List
+                      </Button>
+                    </CardActions>
+                  </CardActionArea>
                 </CardContent>
               </Card>
             </Grid>
