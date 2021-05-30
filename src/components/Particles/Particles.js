@@ -9,6 +9,10 @@ export default () => (
       left: 0,
       width: '100%',
       height: '100%',
+      // Prevents any mouse interactions with the particles wrapper
+      pointerEvents: 'none',
+      // Also, puts the particles wrapper behind the rest of the content (extra guard)
+      zIndex: -1,
     }}
   >
     <Particles
