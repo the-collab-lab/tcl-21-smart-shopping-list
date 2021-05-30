@@ -1,17 +1,38 @@
 .background-red {
-  background-color: red;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  font-size: large;
+  border: 2px solid #ee204d;
 }
 
 .background-yellow {
-  background-color: yellow;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  font-size: large;
+  border: 2px solid #f8b878;
 }
 
 .background-green {
-  background-color: green;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  font-size: large;
+  border: 2px solid #0abab5;
 }
 
 .background-grey {
-  background-color: grey;
+  border-radius: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  font-size: large;
+  border: 2px solid grey;
+  /* background-color: grey; */
 }
 
 .delete-button {

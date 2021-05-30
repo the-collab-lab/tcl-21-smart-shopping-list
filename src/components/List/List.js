@@ -4,7 +4,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import GroceryItem from '../GroceryItem/GroceryItem';
 import NavBar from '../NavBar/NavBar';
 import { useHistory } from 'react-router-dom';
-import { makeStyles, useTheme } from '@material-ui/core';
+import { makeStyles, useTheme, Typography, Input } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import './List.css';
@@ -15,6 +15,12 @@ const useStyles = makeStyles((theme) => ({
   container: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
+  },
+  filterInput: {
+    borderRadius: 4,
+    border: 1,
+    borderColor: theme.primary,
+    width: '85%',
   },
 }));
 
@@ -68,15 +74,17 @@ const List = ({ token, setToken }) => {
           component="section"
           className={matchesSM ? classes.mobileContainer : classes.container}
         >
-          <h1>Current List</h1>
-          <label htmlFor="filtered-item">Filter Items</label>
-          <input
+          <Typography variant="h4" color="primary">
+            Current List
+          </Typography>
+          <br />
+          <Input
             type="text"
             id="filtered-item"
-            placeholder="Start typing here..."
+            placeholder="Filter..."
             value={filterTerm}
             onChange={(event) => searchHandler(event)}
-            className="list-input"
+            className={'filterInput'}
           />
           <i
             className="fas fa-times"

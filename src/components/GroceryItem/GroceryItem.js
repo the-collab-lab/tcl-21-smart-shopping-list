@@ -3,12 +3,26 @@ import { firestore } from '../../lib/firebase.js';
 import { differenceInDays, addDays } from 'date-fns';
 import calculateEstimate from '../../lib/estimates';
 import './GroceryItem.css';
+import { makeStyles, useTheme, Typography, Input } from '@material-ui/core';
+
+const useStyles = makeStyles((theme) => ({
+  container: {},
+  filterInput: {
+    borderRadius: 4,
+    border: 1,
+    borderColor: theme.primary,
+    width: '85%',
+  },
+}));
 
 const GroceryItem = ({ item }) => {
   const groceryItem = firestore.collection('groceryItems').doc(item.id);
   const [isChecked, setChecked] = useState(false);
   const currentDate = Date.now();
   const ONE_DAY_IN_MILLISECONDS = 60 * 60 * 24 * 1000;
+
+  const classes = useStyles();
+  const theme = useTheme();
 
   useEffect(() => {
     if (item.purchaseDate > Date.now() - ONE_DAY_IN_MILLISECONDS) {
