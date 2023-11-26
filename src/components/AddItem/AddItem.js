@@ -120,17 +120,16 @@ const AddItem = (props) => {
       </Typography>
       <br></br>
       <form onSubmit={handleSubmitClick} className={classes.radioButtons}>
-        <label htmlFor="addItem">
-          <Input
-            id="addItem"
-            name="addItem"
-            type="text"
-            value={groceryItem}
-            onChange={itemInputChange}
-            placeholder="Item Name"
-            color="primary"
-          />
-        </label>
+        <label htmlFor="addItem">Add Item</label>
+        <input
+          id="addItem"
+          name="addItem"
+          type="text"
+          value={groceryItem}
+          onChange={itemInputChange}
+          placeholder="Item Name"
+          color="primary"
+        />
         <br />
         <br />
         <p>How soon will you buy this again?</p>
