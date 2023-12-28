@@ -14,6 +14,7 @@ import {
   Icon,
   TextField,
 } from '@material-ui/core';
+import { ArchivalNoticeModal } from '@the-collab-lab/shopping-list-utils';
 
 const useStyles = makeStyles({
   root: {
@@ -48,20 +49,21 @@ const WelcomeScreen = ({ token, setToken }) => {
   const history = useHistory();
 
   const getTokens = async () => {
-    const newToken = getToken();
+    console.log('Creating new lists is disabled');
+    // const newToken = getToken();
 
     // Option 1: A&V's Implementation
-    try {
-      // Using the 'set' method over the 'add' method b/c we want to create our own doc id that is equal to the token for easy referencing later
-      await firestore.collection('lists').doc(newToken).set({
-        name: newToken,
-        createdAt: Date.now(),
-      });
-      window.localStorage.setItem('token', newToken);
-      setToken(newToken);
-    } catch (error) {
-      console.log('Error creating list in db: ', error);
-    }
+    // try {
+    //   // Using the 'set' method over the 'add' method b/c we want to create our own doc id that is equal to the token for easy referencing later
+    //   await firestore.collection('lists').doc(newToken).set({
+    //     name: newToken,
+    //     createdAt: Date.now(),
+    //   });
+    //   window.localStorage.setItem('token', newToken);
+    //   setToken(newToken);
+    // } catch (error) {
+    //   console.log('Error creating list in db: ', error);
+    // }
 
     // Option 2: Compatible with T&T's Implementation
     // window.localStorage.setItem('token', newToken);
@@ -228,6 +230,7 @@ const WelcomeScreen = ({ token, setToken }) => {
           </p>
         </>
       )}
+      <ArchivalNoticeModal />
     </>
   );
 };
